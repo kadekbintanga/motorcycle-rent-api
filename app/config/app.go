@@ -1,0 +1,48 @@
+package config
+
+import (
+	"motorcycle-rent-api/app/global"
+	"motorcycle-rent-api/app/handler"
+	"motorcycle-rent-api/app/repository"
+	"motorcycle-rent-api/app/router"
+	"motorcycle-rent-api/app/service"
+
+	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
+	"github.com/sirupsen/logrus"
+	"gorm.io/gorm"
+)
+
+type BootstrapConfig struct {
+	Config    *global.EnvConfig
+	DB        *gorm.DB
+	Server    *gin.Engine
+	Validator *validator.Validate
+	Logger    *logrus.Logger
+}
+
+func InitConfig(config *BootstrapConfig) {
+	// REPOSITORY
+	configRepo := repository.NewConfigRepository()
+	adminRepo := repository.NewAdminRepository()
+
+	// SERVICE
+	healthService := service.NewHealthService(config.DB, configRepo)
+	adminService := service.NewAdminService(config.DB, config.Config, adminRepo)
+
+	// HANDLER
+	healthHandler := handler.NewHealthHandler(healthService)
+	adminHandler := handler.NewAdminHandler(adminService, config.Validator)
+
+	// ROUTERS
+	routeConfig := router.Config{
+		Server:        config.Server,
+		Logger:        config.Logger,
+		Config:        config.Config,
+		DB:            config.DB,
+		HealthHandler: healthHandler,
+		AdminHandler:  adminHandler,
+	}
+
+	routeConfig.Init()
+}
