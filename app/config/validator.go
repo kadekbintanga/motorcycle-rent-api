@@ -147,6 +147,11 @@ func InitValidator() *validator.Validate {
 		log.Println("[ERROR] Error register validation cms_admin_password : " + err.Error())
 	}
 
+	err = validate.RegisterValidation("plate_number", AlphanumericOnly)
+	if err != nil {
+		log.Println("[ERROR] Error register validation plate_number : " + err.Error())
+	}
+
 	return validate
 }
 

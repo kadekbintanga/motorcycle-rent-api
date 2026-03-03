@@ -11,20 +11,28 @@ import (
 )
 
 type Config struct {
-	Server        *gin.Engine
-	Logger        *logrus.Logger
-	Config        *global.EnvConfig
-	DB            *gorm.DB
-	HealthHandler *handler.HealthHandler
-	AdminHandler  *handler.AdminHandler
+	Server            *gin.Engine
+	Logger            *logrus.Logger
+	Config            *global.EnvConfig
+	DB                *gorm.DB
+	HealthHandler     *handler.HealthHandler
+	AdminHandler      *handler.AdminHandler
+	MotorcycleHandler *handler.MotorcycleHandler
 }
 
 func (c *Config) Init() {
-	c.Server.GET("/health", middleware.InboundLogger(c.Logger), c.HealthHandler.HealthCheck)
+	// c.Server.GET("/health", middleware.InboundLogger(c.Logger), c.HealthHandler.HealthCheck)
 
 	api := c.Server.Group("/api/v1")
 
 	noLoggerGroup := api.Group("/")
 	noLoggerGroup.POST("/login", c.AdminHandler.Login)
+
+	loggerGroup := api.Group("/", middleware.InboundLogger(c.Logger))
+	loggerGroup.GET("/health", c.HealthHandler.HealthCheck)
+
+	// Motorcycle routes
+	motorcycleGroup := loggerGroup.Group("/motorcycles")
+	motorcycleGroup.POST("/", c.MotorcycleHandler.CreateMotorcycle)
 
 }

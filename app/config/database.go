@@ -5,6 +5,7 @@ import (
 	"log"
 	"strings"
 
+	"motorcycle-rent-api/app/constant"
 	"motorcycle-rent-api/app/global"
 	"motorcycle-rent-api/app/model"
 	"motorcycle-rent-api/app/seeder"
@@ -49,14 +50,24 @@ func DisconnectDatabase(db *gorm.DB) {
 }
 
 func MigrateEnum(db *gorm.DB) {
-	// var err error
-	// Merchant Status
-	// 	if err = MigrateEnumType(db, "merchant_status", []string{
-	// 		string(constant.MerchantStatusActive),
-	// 		string(constant.MerchantStatusInactive),
-	// 	}); err != nil {
-	// 		log.Fatalf("Failed to migrate enum merchant_status type: %v", err)
-	// 	}
+	var err error
+	// Motorcycle Status
+	if err = MigrateEnumType(db, "motorcycle_status", []string{
+		string(constant.MotorcycleStatusAvailable),
+		string(constant.MotorcycleStatusRented),
+		string(constant.MotorcycleStatusMaintenance),
+		string(constant.MotorcycleStatusInactive),
+	}); err != nil {
+		log.Fatalf("Failed to migrate enum motorcycle_status type: %v", err)
+	}
+
+	// Motorcycle Type
+	if err = MigrateEnumType(db, "motorcycle_type", []string{
+		string(constant.MotorcycleTypeMatic),
+		string(constant.MotorcycleTypeManual),
+	}); err != nil {
+		log.Fatalf("Failed to migrate enum motorcycle_type type: %v", err)
+	}
 }
 
 func MigrateTable(db *gorm.DB) {
@@ -65,6 +76,7 @@ func MigrateTable(db *gorm.DB) {
 	models := []interface{}{
 		&model.Config{},
 		&model.Admin{},
+		&model.Motorcycle{},
 	}
 
 	for _, modelMigrate := range models {
@@ -85,6 +97,7 @@ func MigrateDatabase(db *gorm.DB) {
 func SeedDatabase(db *gorm.DB, config *global.EnvConfig) {
 	seeder.SeedConfigs(db, config)
 	seeder.SeedSuperAdmin(db)
+	seeder.SeedMotorcycles(db)
 }
 
 func InitUUID(db *gorm.DB) {
