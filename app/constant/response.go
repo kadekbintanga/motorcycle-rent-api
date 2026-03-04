@@ -40,8 +40,11 @@ var (
 )
 
 var (
-	Res400Failed         = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Failed"}
-	Res400InvalidPayload = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Invalid payload data"}
+	Res400Failed                = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Failed"}
+	Res400InvalidPayload        = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Invalid payload data"}
+	Res400PlateNumberExists     = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Plate number already exists"}
+	Res404MotorcycleNotFound    = ResponseMap{Code: http.StatusNotFound, Status: ResponseStatusFailed, Message: "Motorcycle not found"}
+	Res400InvalidMotorcycleUUID = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Invalid motorcycle ID"}
 )
 
 var (

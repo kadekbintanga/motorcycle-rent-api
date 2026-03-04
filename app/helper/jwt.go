@@ -60,7 +60,7 @@ func ValidateJWTAdmin(tokenString, secret string, db *gorm.DB) (*AdminAuthClaims
 	}
 
 	var adminFound *model.Admin
-	err = db.Preload("Role").Preload("Role.Features").Where("email = ?", strings.ToLower(claims["email"].(string))).First(&adminFound).Error
+	err = db.Where("email = ?", strings.ToLower(claims["email"].(string))).First(&adminFound).Error
 	if err != nil || adminFound == nil {
 		return nil, errors.New("unable to get user data")
 	}

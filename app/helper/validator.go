@@ -85,8 +85,8 @@ func ErrorValidationMessageGenerator(field, tag, param string) string {
 		message = field + " only can be number"
 	case "email":
 		message = "invalid email format " + field
-	case "merchant_download_column":
-		message = "Invalid column requested."
+	case "plate_number":
+		message = "Invalid plate number format."
 	case "timezone":
 		message = "Invalid timezone format."
 	case "gte":
