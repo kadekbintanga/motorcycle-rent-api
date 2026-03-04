@@ -32,7 +32,9 @@ func (c *Config) Init() {
 	loggerGroup.GET("/health", c.HealthHandler.HealthCheck)
 
 	// Motorcycle routes
-	motorcycleGroup := loggerGroup.Group("/motorcycles")
+	motorcycleGroup := loggerGroup.Group("/motorcycles", middleware.AdminAuthorized(c.DB))
 	motorcycleGroup.POST("/", c.MotorcycleHandler.CreateMotorcycle)
-
+	motorcycleGroup.GET("/", c.MotorcycleHandler.GetListMotorcycles)
+	motorcycleGroup.PUT("/:motorcycleUUID", c.MotorcycleHandler.UpdateMotorcycleDetail)
+	motorcycleGroup.PUT("/:motorcycleUUID/status", c.MotorcycleHandler.UpdateMotorcycleStatus)
 }

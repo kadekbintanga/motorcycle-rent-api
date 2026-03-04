@@ -7,3 +7,21 @@ type CreateMotorcycleRequest struct {
 	Year        int    `json:"year" validate:"required"`
 	Status      string `json:"status" validate:"required,oneof=AVAILABLE MAINTENANCE INACTIVE"`
 }
+
+type GetMotorcycleListFilter struct {
+	Type   string `form:"type" validate:"omitempty,oneof=MANUAL MATIC"`
+	Status string `form:"status" validate:"omitempty,oneof=AVAILABLE MAINTENANCE INACTIVE RENTED"`
+	Year   int    `form:"year" validate:"omitempty"`
+}
+
+type UpdateMotorcycleRequest struct {
+	PlateNumber string `json:"plate_number" validate:"required,not_only_space,plate_number"`
+	Brand       string `json:"brand" validate:"required"`
+	Type        string `json:"type" validate:"oneof=MANUAL MATIC"`
+	Year        int    `json:"year" validate:"required"`
+	Status      string `json:"status" validate:"oneof=AVAILABLE MAINTENANCE INACTIVE"`
+}
+
+type UpdateMotorcycleStatusRequest struct {
+	Status string `json:"status" validate:"oneof=AVAILABLE MAINTENANCE INACTIVE"`
+}
