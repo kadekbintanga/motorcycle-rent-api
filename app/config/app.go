@@ -26,16 +26,19 @@ func InitConfig(config *BootstrapConfig) {
 	configRepo := repository.NewConfigRepository()
 	adminRepo := repository.NewAdminRepository()
 	motorcycleRepo := repository.NewMotorcycleRepository()
+	customerRepo := repository.NewCustomerRepository()
 
 	// SERVICE
 	healthService := service.NewHealthService(config.DB, configRepo)
 	adminService := service.NewAdminService(config.DB, config.Config, adminRepo)
 	motorcycleService := service.NewMotorcycleService(config.DB, motorcycleRepo)
+	customerService := service.NewCustomerService(config.DB, customerRepo)
 
 	// HANDLER
 	healthHandler := handler.NewHealthHandler(healthService)
 	adminHandler := handler.NewAdminHandler(adminService, config.Validator)
 	motorcycleHandler := handler.NewMotorcycleHandler(motorcycleService, config.Validator)
+	customerHandler := handler.NewCustomerHandler(customerService, config.Validator)
 
 	// ROUTERS
 	routeConfig := router.Config{
@@ -46,6 +49,7 @@ func InitConfig(config *BootstrapConfig) {
 		HealthHandler:     healthHandler,
 		AdminHandler:      adminHandler,
 		MotorcycleHandler: motorcycleHandler,
+		CustomerHandler:   customerHandler,
 	}
 
 	routeConfig.Init()

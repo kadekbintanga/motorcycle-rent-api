@@ -70,7 +70,7 @@ func (m *MotorcycleService) CreateMotorcycle(apiCallID string, payload request.C
 			return constant.Res422SomethingWentWrong
 		}
 	}
-	return constant.Res200Success
+	return constant.Res200Save
 }
 
 func (m *MotorcycleService) GetListMotorcyclesPagination(apiCallID string, param helper.PaginationParam, filter request.GetMotorcycleListFilter) ([]response.MotorcycleListpaginationResponse, *helper.ResponseMeta, constant.ResponseMap) {
@@ -81,7 +81,7 @@ func (m *MotorcycleService) GetListMotorcyclesPagination(apiCallID string, param
 	}
 
 	formattedMotorcycleList := response.MotorcycleListpaginationResponseFormatter(motorcycles)
-	return formattedMotorcycleList, &meta, constant.Res200Success
+	return formattedMotorcycleList, &meta, constant.Res200Get
 }
 
 func (m *MotorcycleService) UpdateMotorcycleDetail(apiCallID string, motorcycleUUID string, payload request.UpdateMotorcycleRequest) constant.ResponseMap {
@@ -131,7 +131,7 @@ func (m *MotorcycleService) UpdateMotorcycleDetail(apiCallID string, motorcycleU
 			return constant.Res422SomethingWentWrong
 		}
 	}
-	return constant.Res200Success
+	return constant.Res200Update
 }
 
 func (m *MotorcycleService) UpdateMotorcycleStatus(apiCallID string, motorcycleUUID string, payload request.UpdateMotorcycleStatusRequest) constant.ResponseMap {
@@ -162,5 +162,5 @@ func (m *MotorcycleService) UpdateMotorcycleStatus(apiCallID string, motorcycleU
 			return constant.Res422SomethingWentWrong
 		}
 	}
-	return constant.Res200Success
+	return constant.Res200Update
 }
