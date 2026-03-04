@@ -3,14 +3,15 @@ package response
 import "motorcycle-rent-api/app/model"
 
 type MotorcycleListpaginationResponse struct {
-	UUID        string `json:"uuid"`
-	PlateNumber string `json:"plate_number"`
-	Brand       string `json:"brand"`
-	Type        string `json:"type"`
-	Year        int    `json:"year"`
-	Status      string `json:"status"`
-	CreatedAt   string `json:"created_at"`
-	UpdatedAt   string `json:"updated_at"`
+	UUID        string  `json:"uuid"`
+	PlateNumber string  `json:"plate_number"`
+	Brand       string  `json:"brand"`
+	Type        string  `json:"type"`
+	Year        int     `json:"year"`
+	Status      string  `json:"status"`
+	PricePerDay float64 `json:"price_per_day"`
+	CreatedAt   string  `json:"created_at"`
+	UpdatedAt   string  `json:"updated_at"`
 }
 
 func MotorcycleListpaginationResponseFormatter(motorcycles []model.Motorcycle) []MotorcycleListpaginationResponse {
@@ -23,6 +24,7 @@ func MotorcycleListpaginationResponseFormatter(motorcycles []model.Motorcycle) [
 			Type:        string(motorcycle.Type),
 			Year:        motorcycle.Year,
 			Status:      string(motorcycle.Status),
+			PricePerDay: motorcycle.PricePerDay,
 			CreatedAt:   motorcycle.CreatedAt.String(),
 			UpdatedAt:   motorcycle.UpdatedAt.String(),
 		})

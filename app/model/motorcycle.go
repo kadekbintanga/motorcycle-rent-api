@@ -16,6 +16,7 @@ type Motorcycle struct {
 	Type        constant.MotorcycleType   `gorm:"column:type;type:motorcycle_type;default:'MATIC';"`
 	Year        int                       `gorm:"column:year"`
 	Status      constant.MotorcycleStatus `gorm:"column:status;type:motorcycle_status;default:'AVAILABLE';"`
+	PricePerDay float64                   `gorm:"column:price_per_day"`
 	CreatedAt   time.Time                 `gorm:"column:created_at"`
 	UpdatedAt   time.Time                 `gorm:"column:updated_at"`
 	DeletedAt   gorm.DeletedAt            `gorm:"column:deleted_at"`

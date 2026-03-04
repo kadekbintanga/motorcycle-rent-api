@@ -52,6 +52,7 @@ func (m *MotorcycleService) CreateMotorcycle(apiCallID string, payload request.C
 			Type:        constant.MotorcycleType(payload.Type),
 			Year:        payload.Year,
 			Status:      constant.MotorcycleStatus(payload.Status),
+			PricePerDay: payload.PricePerDay,
 		}
 
 		_, err = m.MotorcycleRepository.CreateMotorcycle(tx, createMotorcycle)
@@ -110,11 +111,12 @@ func (m *MotorcycleService) UpdateMotorcycleDetail(apiCallID string, motorcycleU
 		}
 
 		updateMotorcycle := map[string]interface{}{
-			"plate_number": strings.ToUpper(payload.PlateNumber),
-			"brand":        payload.Brand,
-			"type":         constant.MotorcycleType(payload.Type),
-			"year":         payload.Year,
-			"status":       constant.MotorcycleStatus(payload.Status),
+			"plate_number":  strings.ToUpper(payload.PlateNumber),
+			"brand":         payload.Brand,
+			"type":          constant.MotorcycleType(payload.Type),
+			"year":          payload.Year,
+			"status":        constant.MotorcycleStatus(payload.Status),
+			"price_per_day": payload.PricePerDay,
 		}
 
 		err = m.MotorcycleRepository.UpdateMotorcycleMap(tx, *motorcycle, updateMotorcycle)
