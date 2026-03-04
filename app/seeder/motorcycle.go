@@ -16,6 +16,7 @@ func SeedMotorcycles(db *gorm.DB) {
 			Type:        constant.MotorcycleTypeMatic,
 			Year:        2020,
 			Status:      constant.MotorcycleStatusAvailable,
+			PricePerDay: 200000,
 		},
 		{
 			PlateNumber: "DK5678DEF",
@@ -23,6 +24,7 @@ func SeedMotorcycles(db *gorm.DB) {
 			Type:        constant.MotorcycleTypeManual,
 			Year:        2019,
 			Status:      constant.MotorcycleStatusAvailable,
+			PricePerDay: 300000,
 		},
 		{
 			PlateNumber: "DK9012GHI",
@@ -30,6 +32,7 @@ func SeedMotorcycles(db *gorm.DB) {
 			Type:        constant.MotorcycleTypeManual,
 			Year:        2021,
 			Status:      constant.MotorcycleStatusMaintenance,
+			PricePerDay: 250000,
 		},
 		{
 			PlateNumber: "DK3456JKO",
@@ -37,6 +40,7 @@ func SeedMotorcycles(db *gorm.DB) {
 			Type:        constant.MotorcycleTypeManual,
 			Year:        2022,
 			Status:      constant.MotorcycleStatusAvailable,
+			PricePerDay: 400000,
 		},
 		{
 			PlateNumber: "DK7890MNO",
@@ -44,6 +48,7 @@ func SeedMotorcycles(db *gorm.DB) {
 			Type:        constant.MotorcycleTypeManual,
 			Year:        2022,
 			Status:      constant.MotorcycleStatusAvailable,
+			PricePerDay: 400000,
 		},
 		{
 			PlateNumber: "DK3345PQZ",
@@ -51,6 +56,7 @@ func SeedMotorcycles(db *gorm.DB) {
 			Type:        constant.MotorcycleTypeMatic,
 			Year:        2020,
 			Status:      constant.MotorcycleStatusAvailable,
+			PricePerDay: 300000,
 		},
 		{
 			PlateNumber: "DK6789STU",
@@ -58,6 +64,7 @@ func SeedMotorcycles(db *gorm.DB) {
 			Type:        constant.MotorcycleTypeMatic,
 			Year:        2019,
 			Status:      constant.MotorcycleStatusAvailable,
+			PricePerDay: 210000,
 		},
 		{
 			PlateNumber: "DK0123VWX",
@@ -65,6 +72,7 @@ func SeedMotorcycles(db *gorm.DB) {
 			Type:        constant.MotorcycleTypeMatic,
 			Year:        2021,
 			Status:      constant.MotorcycleStatusMaintenance,
+			PricePerDay: 250000,
 		},
 		{
 			PlateNumber: "DK3456JKL",
@@ -72,6 +80,7 @@ func SeedMotorcycles(db *gorm.DB) {
 			Type:        constant.MotorcycleTypeMatic,
 			Year:        2022,
 			Status:      constant.MotorcycleStatusAvailable,
+			PricePerDay: 400000,
 		},
 		{
 			PlateNumber: "DK7890MNC",
@@ -79,6 +88,7 @@ func SeedMotorcycles(db *gorm.DB) {
 			Type:        constant.MotorcycleTypeMatic,
 			Year:        2022,
 			Status:      constant.MotorcycleStatusAvailable,
+			PricePerDay: 200000,
 		},
 		{
 			PlateNumber: "DK2345PQR",
@@ -86,6 +96,7 @@ func SeedMotorcycles(db *gorm.DB) {
 			Type:        constant.MotorcycleTypeMatic,
 			Year:        2020,
 			Status:      constant.MotorcycleStatusAvailable,
+			PricePerDay: 250000,
 		},
 		{
 			PlateNumber: "DK6789G",
@@ -93,6 +104,7 @@ func SeedMotorcycles(db *gorm.DB) {
 			Type:        constant.MotorcycleTypeMatic,
 			Year:        2019,
 			Status:      constant.MotorcycleStatusAvailable,
+			PricePerDay: 210000,
 		},
 	}
 
