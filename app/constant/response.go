@@ -45,6 +45,9 @@ var (
 	Res400PlateNumberExists     = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Plate number already exists"}
 	Res404MotorcycleNotFound    = ResponseMap{Code: http.StatusNotFound, Status: ResponseStatusFailed, Message: "Motorcycle not found"}
 	Res400InvalidMotorcycleUUID = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Invalid motorcycle ID"}
+	Res400IDOrSIMNumberExists   = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "ID or SIM number already exists"}
+	Res400CustomerNotFound      = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Customer not found"}
+	Res400InvalidCustomerUUID   = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Invalid customer ID"}
 )
 
 var (

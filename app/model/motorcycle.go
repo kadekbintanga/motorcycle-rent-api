@@ -18,5 +18,5 @@ type Motorcycle struct {
 	Status      constant.MotorcycleStatus `gorm:"column:status;type:motorcycle_status;default:'AVAILABLE';"`
 	CreatedAt   time.Time                 `gorm:"column:created_at"`
 	UpdatedAt   time.Time                 `gorm:"column:updated_at"`
-	DeletedAt   gorm.DeletedAt            `gorm:"column:deleted_at;index;"`
+	DeletedAt   gorm.DeletedAt            `gorm:"column:deleted_at"`
 }

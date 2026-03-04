@@ -68,6 +68,14 @@ func MigrateEnum(db *gorm.DB) {
 	}); err != nil {
 		log.Fatalf("Failed to migrate enum motorcycle_type type: %v", err)
 	}
+
+	// Customer Status
+	if err = MigrateEnumType(db, "customer_status", []string{
+		string(constant.CustomerStatusActive),
+		string(constant.CustomerStatusBlacklisted),
+	}); err != nil {
+		log.Fatalf("Failed to migrate enum customer_status type: %v", err)
+	}
 }
 
 func MigrateTable(db *gorm.DB) {
@@ -77,6 +85,7 @@ func MigrateTable(db *gorm.DB) {
 		&model.Config{},
 		&model.Admin{},
 		&model.Motorcycle{},
+		&model.Customer{},
 	}
 
 	for _, modelMigrate := range models {

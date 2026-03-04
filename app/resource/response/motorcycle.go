@@ -15,16 +15,16 @@ type MotorcycleListpaginationResponse struct {
 
 func MotorcycleListpaginationResponseFormatter(motorcycles []model.Motorcycle) []MotorcycleListpaginationResponse {
 	var result []MotorcycleListpaginationResponse
-	for _, motormotorcycle := range motorcycles {
+	for _, motorcycle := range motorcycles {
 		result = append(result, MotorcycleListpaginationResponse{
-			UUID:        motormotorcycle.UUID.String(),
-			PlateNumber: motormotorcycle.PlateNumber,
-			Brand:       motormotorcycle.Brand,
-			Type:        string(motormotorcycle.Type),
-			Year:        motormotorcycle.Year,
-			Status:      string(motormotorcycle.Status),
-			CreatedAt:   motormotorcycle.CreatedAt.String(),
-			UpdatedAt:   motormotorcycle.UpdatedAt.String(),
+			UUID:        motorcycle.UUID.String(),
+			PlateNumber: motorcycle.PlateNumber,
+			Brand:       motorcycle.Brand,
+			Type:        string(motorcycle.Type),
+			Year:        motorcycle.Year,
+			Status:      string(motorcycle.Status),
+			CreatedAt:   motorcycle.CreatedAt.String(),
+			UpdatedAt:   motorcycle.UpdatedAt.String(),
 		})
 	}
 	return result

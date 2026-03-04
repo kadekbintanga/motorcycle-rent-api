@@ -18,6 +18,7 @@ type Config struct {
 	HealthHandler     *handler.HealthHandler
 	AdminHandler      *handler.AdminHandler
 	MotorcycleHandler *handler.MotorcycleHandler
+	CustomerHandler   *handler.CustomerHandler
 }
 
 func (c *Config) Init() {
@@ -37,4 +38,12 @@ func (c *Config) Init() {
 	motorcycleGroup.GET("/", c.MotorcycleHandler.GetListMotorcycles)
 	motorcycleGroup.PUT("/:motorcycleUUID", c.MotorcycleHandler.UpdateMotorcycleDetail)
 	motorcycleGroup.PUT("/:motorcycleUUID/status", c.MotorcycleHandler.UpdateMotorcycleStatus)
+
+	// Customer routes
+	customerGroup := loggerGroup.Group("/customers", middleware.AdminAuthorized(c.DB))
+	customerGroup.POST("/", c.CustomerHandler.CreateCustomer)
+	customerGroup.PUT("/:customerUUID", c.CustomerHandler.UpdateCustomerDetail)
+	customerGroup.PUT("/:customerUUID/status", c.CustomerHandler.UpdateCustomerStatus)
+	customerGroup.GET("/", c.CustomerHandler.GetListCustomers)
+	customerGroup.GET("/:customerUUID", c.CustomerHandler.GetCustomerDetail)
 }
