@@ -42,3 +42,30 @@ func (r *RentalHandler) CreateRental(c *gin.Context) {
 	helper.ResponseAPI(c, res, rental)
 
 }
+
+func (r *RentalHandler) ReturnRental(c *gin.Context) {
+	apiCallID := c.GetString(constant.RequestIDKey)
+	rentalUUID := c.Param("rentalUUID")
+	err := r.Validator.Var(rentalUUID, "uuid")
+	if err != nil {
+		helper.LogInfo(apiCallID, "Invalid motorcycle UUID: "+err.Error())
+		helper.ResponseAPI(c, constant.Res400InvalidMotorcycleUUID)
+		return
+	}
+
+	var payload request.ReturnRentalRequest
+	if err := c.ShouldBind(&payload); err != nil {
+		helper.ResponseAPI(c, constant.Res400InvalidPayload)
+		return
+	}
+
+	err = r.Validator.Struct(payload)
+	if err != nil {
+		formattedErrors := helper.ErrorValidationFormatter(err.(validator.ValidationErrors))
+		helper.ResponseAPI(c, constant.Res400InvalidPayload, formattedErrors)
+		return
+	}
+
+	res := r.Service.ReturnRental(apiCallID, rentalUUID, payload)
+	helper.ResponseAPI(c, res)
+}

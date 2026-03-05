@@ -14,6 +14,7 @@ type CustomerRepositoryInterface interface {
 	UpdateCustomerMap(db *gorm.DB, customer model.Customer, updateData map[string]interface{}) error
 	GetCustomerByUUID(db *gorm.DB, customerUUID string, withPreload bool) (*model.Customer, error)
 	GetListCustomerPagination(db *gorm.DB, param helper.PaginationParam, filter request.GetCustomerListFilter) ([]model.Customer, helper.ResponseMeta, error)
+	UpdateCustomerByUUID(db *gorm.DB, customerUUID string, updateData model.Customer) error
 }
 
 type CustomerRepository struct{}
@@ -94,4 +95,12 @@ func (c *CustomerRepository) GetListCustomerPagination(db *gorm.DB, param helper
 	}
 
 	return customer, meta, nil
+}
+
+func (c *CustomerRepository) UpdateCustomerByUUID(db *gorm.DB, customerUUID string, updateData model.Customer) error {
+	err := db.Model(&model.Customer{}).Where("uuid = ?", customerUUID).Updates(updateData).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }

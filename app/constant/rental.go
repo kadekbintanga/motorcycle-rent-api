@@ -7,3 +7,9 @@ const (
 	RentalStatusCompleted RentalStatus = "COMPLETED"
 	RentalStatusCancelled RentalStatus = "CANCELLED"
 )
+
+type RetalTablePreload string
+
+const (
+	RentalPayment RetalTablePreload = "Payment"
+)

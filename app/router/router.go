@@ -51,4 +51,5 @@ func (c *Config) Init() {
 	// Rental router
 	rentalGroup := loggerGroup.Group("/rentals", middleware.AdminAuthorized())
 	rentalGroup.POST("", c.RentalHandler.CreateRental)
+	rentalGroup.POST("/:rentalUUID/return", c.RentalHandler.ReturnRental)
 }

@@ -31,4 +31,5 @@ type Rental struct {
 	DeletedAt                     gorm.DeletedAt        `gorm:"column:deleted_at"`
 	Customer                      Customer              `gorm:"foreignKey:CustomerUUID;references:UUID"`
 	Motorcycle                    Motorcycle            `gorm:"foreignKey:MotorcycleUUID;references:UUID"`
+	Payment                       []Payment             `gorm:"foreignKey:RentalUUID;references:UUID;"`
 }
