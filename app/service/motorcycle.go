@@ -126,7 +126,7 @@ func (m *MotorcycleService) UpdateMotorcycleDetail(apiCallID string, motorcycleU
 	if err != nil {
 		switch err.Error() {
 		case "motorcycle not found":
-			return constant.Res404MotorcycleNotFound
+			return constant.Res400MotorcycleNotFound
 		case "plate number already exists":
 			return constant.Res400PlateNumberExists
 		default:
@@ -159,7 +159,7 @@ func (m *MotorcycleService) UpdateMotorcycleStatus(apiCallID string, motorcycleU
 	if err != nil {
 		switch err.Error() {
 		case "motorcycle not found":
-			return constant.Res404MotorcycleNotFound
+			return constant.Res400MotorcycleNotFound
 		default:
 			return constant.Res422SomethingWentWrong
 		}
