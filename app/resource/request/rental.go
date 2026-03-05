@@ -27,3 +27,8 @@ type GetRentalListFilter struct {
 	RentDateEnd    string `form:"rent_date_end"`
 	Status         string `form:"status" validate:"omitempty,oneof=ONGOING COMPLETED CANCELED"`
 }
+
+type GetRentalSummaryFilter struct {
+	DateStart string `form:"date_start"`
+	DateEnd   string `form:"date_end"`
+}

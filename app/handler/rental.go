@@ -173,3 +173,18 @@ func (r *RentalHandler) GetRentalDetail(c *gin.Context) {
 	rental, res := r.Service.GetDetailRental(apiCallID, rentalUUID)
 	helper.ResponseAPI(c, res, rental)
 }
+
+func (r *RentalHandler) GetRentalSummary(c *gin.Context) {
+	apiCallID := c.GetString(constant.RequestIDKey)
+
+	DateStart := c.Query("date_start")
+	DateEnd := c.Query("date_end")
+
+	filter := request.GetRentalSummaryFilter{
+		DateStart: DateStart,
+		DateEnd:   DateEnd,
+	}
+
+	summary, res := r.Service.GetRentalSummary(apiCallID, filter)
+	helper.ResponseAPI(c, res, summary)
+}

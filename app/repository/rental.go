@@ -5,6 +5,7 @@ import (
 	"motorcycle-rent-api/app/helper"
 	"motorcycle-rent-api/app/model"
 	"motorcycle-rent-api/app/resource/request"
+	"motorcycle-rent-api/app/resource/response"
 	"time"
 
 	"gorm.io/gorm"
@@ -16,6 +17,7 @@ type RentalRepositoryInterface interface {
 	GetRentalByUUID(db *gorm.DB, rentalUUID string, withPreload bool) (*model.Rental, error)
 	UpdateRentalMap(db *gorm.DB, rental model.Rental, updateData map[string]interface{}) error
 	GetListRentalPagination(db *gorm.DB, param helper.PaginationParam, filter request.GetRentalListFilter) ([]model.Rental, helper.ResponseMeta, error)
+	GetRentalSummary(db *gorm.DB, filter request.GetRentalSummaryFilter) (*response.RentalSummary, error)
 }
 
 type RentalRepository struct {
@@ -67,7 +69,7 @@ func (r *RentalRepository) UpdateRentalMap(db *gorm.DB, rental model.Rental, upd
 func (r *RentalRepository) GetListRentalPagination(db *gorm.DB, param helper.PaginationParam, filter request.GetRentalListFilter) ([]model.Rental, helper.ResponseMeta, error) {
 	var rental []model.Rental
 
-	query := db.Model(&model.Rental{}).Debug()
+	query := db.Model(&model.Rental{})
 
 	if param.Search != "" {
 		query = query.Where("customer_name_captured ILIKE ? OR customer_id_number_captured ILIKE ? OR customer_sim_number_captured ILIKE ? OR customer_phone_captured ILIKE ? OR motorcycle_plate_number_captured ILIKE ?", "%"+param.Search+"%", "%"+param.Search+"%", "%"+param.Search+"%", "%"+param.Search+"%", "%"+param.Search+"%")
@@ -117,5 +119,40 @@ func (r *RentalRepository) GetListRentalPagination(db *gorm.DB, param helper.Pag
 	}
 
 	return rental, meta, nil
+
+}
+
+func (r *RentalRepository) GetRentalSummary(db *gorm.DB, filter request.GetRentalSummaryFilter) (*response.RentalSummary, error) {
+	var result response.RentalSummary
+	query := db.Table("rentals").
+		Select(`
+			COUNT(*) as total,
+			COALESCE(SUM(CASE WHEN status = 'ONGOING' THEN 1 ELSE 0 END),0) as ongoing,
+			COALESCE(SUM(CASE WHEN status = 'COMPLETED' THEN 1 ELSE 0 END),0) as completed,
+			COALESCE(SUM(CASE WHEN status = 'CANCELED' THEN 1 ELSE 0 END),0) as canceled
+		`).
+		Where("deleted_at IS NULL")
+	if filter.DateStart != "" {
+		parseStartTime, err := time.Parse("2006-01-02 15:04:05", filter.DateStart+" 00:00:00")
+		if err != nil {
+			return nil, err
+		}
+		query = query.Where("rent_date >= ?", parseStartTime)
+	}
+
+	if filter.DateEnd != "" {
+		parseEndTime, err := time.Parse("2006-01-02 15:04:05", filter.DateEnd+" 23:59:59")
+		if err != nil {
+			return nil, err
+		}
+		query = query.Where("rent_date <= ?", parseEndTime)
+	}
+
+	err := query.Scan(&result).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &result, nil
 
 }

@@ -57,3 +57,9 @@ func CustomerDetailFormatter(customer model.Customer) CustomerDetailResponse {
 		UpdatedAt:       customer.UpdatedAt.String(),
 	}
 }
+
+type CustomerSummary struct {
+	Total       int64 `json:"total"`
+	Active      int64 `json:"active"`
+	Blacklisted int64 `json:"blacklisted"`
+}

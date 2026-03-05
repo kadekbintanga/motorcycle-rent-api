@@ -15,3 +15,9 @@ const (
 	PaymentMethodTransfer PaymentMethod = "TRANSFER"
 	PaymentMethodQris     PaymentMethod = "QRIS"
 )
+
+type PaymentTablePreload string
+
+const (
+	PaymentRental PaymentTablePreload = "Rental"
+)

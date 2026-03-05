@@ -24,6 +24,7 @@ type RentalServiceInterface interface {
 	CancelRental(apiCallID string, rentalUUID string) constant.ResponseMap
 	GetListRentalPagination(apiCallID string, param helper.PaginationParam, filter request.GetRentalListFilter) ([]response.RentalListPaginationResponse, *helper.ResponseMeta, constant.ResponseMap)
 	GetDetailRental(apiCallID, rentalUUID string) (*response.RentalDetailResponse, constant.ResponseMap)
+	GetRentalSummary(apiCallID string, filter request.GetRentalSummaryFilter) (*response.RentalSummary, constant.ResponseMap)
 }
 
 type RentalService struct {
@@ -432,4 +433,14 @@ func (r *RentalService) GetDetailRental(apiCallID, rentalUUID string) (*response
 	}
 	formatterRentalDetail := response.RentalDetailFormatter(*rental)
 	return &formatterRentalDetail, constant.Res200Get
+}
+
+func (r *RentalService) GetRentalSummary(apiCallID string, filter request.GetRentalSummaryFilter) (*response.RentalSummary, constant.ResponseMap) {
+	summary, err := r.RentalRepository.GetRentalSummary(r.DB, filter)
+	if err != nil {
+		helper.LogError(apiCallID, "Error getting payment summary: "+err.Error())
+		return nil, constant.Res422SomethingWentWrong
+	}
+	return summary, constant.Res200Get
+
 }
