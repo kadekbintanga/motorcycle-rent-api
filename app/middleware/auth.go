@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 const (
@@ -15,7 +14,7 @@ const (
 	ClaimsKey    = "admin_claims"
 )
 
-func AdminAuthorized(db *gorm.DB) gin.HandlerFunc {
+func AdminAuthorized() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		apiID := c.GetString(constant.RequestIDKey)
 		header := c.GetHeader("Authorization")
@@ -49,7 +48,7 @@ func AdminAuthorized(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		claims, err := helper.ValidateJWTAdmin(tokenString, global.GlobalConfig.JWTSecretAdmin, db)
+		claims, err := helper.ValidateJWTAdmin(tokenString, global.GlobalConfig.JWTSecretAdmin)
 		if err != nil {
 			helper.LogError(apiID, "Unauthorized Access : "+err.Error())
 			res := constant.Res401Unauthorized

@@ -76,6 +76,33 @@ func MigrateEnum(db *gorm.DB) {
 	}); err != nil {
 		log.Fatalf("Failed to migrate enum customer_status type: %v", err)
 	}
+
+	// Rental Status
+	if err = MigrateEnumType(db, "rental_status", []string{
+		string(constant.RentalStatusOngoing),
+		string(constant.RentalStatusCompleted),
+		string(constant.RentalStatusCancelled),
+	}); err != nil {
+		log.Fatalf("Failed to migrate enum rental_status type: %v", err)
+	}
+
+	// Payment Type
+	if err = MigrateEnumType(db, "payment_type", []string{
+		string(constant.PaymentTypeDeposit),
+		string(constant.PaymentTypeRentPayment),
+		string(constant.PaymentTypeFullPayment),
+	}); err != nil {
+		log.Fatalf("Failed to migrate enum payment type: %v", err)
+	}
+
+	// Payment Method
+	if err = MigrateEnumType(db, "payment_method", []string{
+		string(constant.PaymentMethodCash),
+		string(constant.PaymentMethodTransfer),
+		string(constant.PaymentMethodQris),
+	}); err != nil {
+		log.Fatalf("Failed to migrate enum payment method: %v", err)
+	}
 }
 
 func MigrateTable(db *gorm.DB) {
@@ -86,6 +113,8 @@ func MigrateTable(db *gorm.DB) {
 		&model.Admin{},
 		&model.Motorcycle{},
 		&model.Customer{},
+		&model.Rental{},
+		&model.Payment{},
 	}
 
 	for _, modelMigrate := range models {
