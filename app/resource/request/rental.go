@@ -12,5 +12,10 @@ type CreateRentalRequest struct {
 type ReturnRentalRequest struct {
 	ReturnDate    string  `json:"return_date" validate:"required"`
 	Payment       float64 `json:"payment"`
-	PaymentMethod string  `json:"payment_method" validate:"required,oneof=CASH TRANSFER QRIS"`
+	PaymentMethod string  `json:"payment_method" validate:"payment_method_required,oneof=CASH TRANSFER QRIS"`
+}
+
+type RentalPaymentRequest struct {
+	Payment       float64 `json:"payment" validate:"required"`
+	PaymentMethod string  `json:"payment_method" validate:"oneof=CASH TRANSFER QRIS"`
 }

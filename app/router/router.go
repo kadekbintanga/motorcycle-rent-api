@@ -52,4 +52,5 @@ func (c *Config) Init() {
 	rentalGroup := loggerGroup.Group("/rentals", middleware.AdminAuthorized())
 	rentalGroup.POST("", c.RentalHandler.CreateRental)
 	rentalGroup.POST("/:rentalUUID/return", c.RentalHandler.ReturnRental)
+	rentalGroup.POST("/:rentalUUID/payment", c.RentalHandler.RentalPayment)
 }
