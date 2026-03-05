@@ -84,7 +84,7 @@ func (c *CustomerRepository) GetListCustomerPagination(db *gorm.DB, param helper
 		return nil, helper.ResponseMeta{}, err
 	}
 
-	if err := query.Find(&customer).Order("name asc").Error; err != nil {
+	if err := query.Order("name ASC").Find(&customer).Error; err != nil {
 		return nil, helper.ResponseMeta{}, err
 	}
 

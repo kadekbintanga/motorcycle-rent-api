@@ -19,3 +19,11 @@ type RentalPaymentRequest struct {
 	Payment       float64 `json:"payment" validate:"required"`
 	PaymentMethod string  `json:"payment_method" validate:"oneof=CASH TRANSFER QRIS"`
 }
+
+type GetRentalListFilter struct {
+	CustomerUUID   string `form:"customer_uuid" validate:"omitempty,uuid"`
+	MotorcycleUUID string `form:"motorcycle_uuid" validate:"omitempty,uuid"`
+	RentDateStart  string `form:"rent_date_start"`
+	RentDateEnd    string `form:"rent_date_end"`
+	Status         string `form:"status" validate:"omitempty,oneof=ONGOING COMPLETED CANCELED"`
+}

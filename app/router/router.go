@@ -53,4 +53,7 @@ func (c *Config) Init() {
 	rentalGroup.POST("", c.RentalHandler.CreateRental)
 	rentalGroup.POST("/:rentalUUID/return", c.RentalHandler.ReturnRental)
 	rentalGroup.POST("/:rentalUUID/payment", c.RentalHandler.RentalPayment)
+	rentalGroup.PUT("/:rentalUUID/cancel", c.RentalHandler.CancelRental)
+	rentalGroup.GET("", c.RentalHandler.GetListRental)
+	rentalGroup.GET("/:rentalUUID", c.RentalHandler.GetRentalDetail)
 }

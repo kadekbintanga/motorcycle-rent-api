@@ -21,6 +21,9 @@ type RentalServiceInterface interface {
 	CreateRental(apiCallID string, payload request.CreateRentalRequest) (*response.CreateRentalResponse, constant.ResponseMap)
 	ReturnRental(apiCallID string, rentalUUID string, payload request.ReturnRentalRequest) constant.ResponseMap
 	RentalPayment(apiCallID string, rentalUUID string, payload request.RentalPaymentRequest) constant.ResponseMap
+	CancelRental(apiCallID string, rentalUUID string) constant.ResponseMap
+	GetListRentalPagination(apiCallID string, param helper.PaginationParam, filter request.GetRentalListFilter) ([]response.RentalListPaginationResponse, *helper.ResponseMeta, constant.ResponseMap)
+	GetDetailRental(apiCallID, rentalUUID string) (*response.RentalDetailResponse, constant.ResponseMap)
 }
 
 type RentalService struct {
@@ -352,4 +355,81 @@ func (r *RentalService) RentalPayment(apiCallID string, rentalUUID string, paylo
 		}
 	}
 	return constant.Res200Save
+}
+
+func (r *RentalService) CancelRental(apiCallID string, rentalUUID string) constant.ResponseMap {
+	err := r.DB.Clauses(clause.Locking{Strength: "UPDATE"}).Transaction(func(tx *gorm.DB) error {
+		rental, err := r.RentalRepository.GetRentalByUUID(tx, rentalUUID, false)
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				helper.LogError(apiCallID, "Rental not found: "+rentalUUID)
+				return errors.New("rental not found")
+			}
+			helper.LogError(apiCallID, "Error getting rental by UUID: "+err.Error())
+			return errors.New("error getting rental by uuid")
+		}
+
+		if rental.Status != constant.RentalStatusOngoing {
+			helper.LogError(apiCallID, "Rental has been returned")
+			return errors.New("rental done")
+		}
+
+		updateRental := map[string]interface{}{
+			"status": constant.RentalStatusCancelled,
+		}
+
+		err = r.RentalRepository.UpdateRentalMap(tx, *rental, updateRental)
+		if err != nil {
+			helper.LogError(apiCallID, "Error update rental data : "+err.Error())
+			return errors.New("error update rental data")
+		}
+
+		updateMotorcycle := model.Motorcycle{
+			Status: constant.MotorcycleStatusAvailable,
+		}
+
+		err = r.MotorcycleRepository.UpdateMotocycleByUUID(tx, rental.MotorcycleUUID.String(), updateMotorcycle)
+		if err != nil {
+			helper.LogError(apiCallID, "Error update motocycle : "+err.Error())
+			return errors.New("error update motocycle")
+		}
+
+		return nil
+	})
+	if err != nil {
+		switch err.Error() {
+		case "rental not found":
+			return constant.Res400RentalNotFound
+		case "rental done":
+			return constant.Res400RentalHasBeenDone
+		default:
+			return constant.Res422SomethingWentWrong
+		}
+	}
+	return constant.Res200Update
+}
+
+func (r *RentalService) GetListRentalPagination(apiCallID string, param helper.PaginationParam, filter request.GetRentalListFilter) ([]response.RentalListPaginationResponse, *helper.ResponseMeta, constant.ResponseMap) {
+	rentals, meta, err := r.RentalRepository.GetListRentalPagination(r.DB, param, filter)
+	if err != nil {
+		helper.LogError(apiCallID, "Error getting rental list: "+err.Error())
+		return nil, nil, constant.Res422SomethingWentWrong
+	}
+
+	formatterRentalList := response.RentalListPaginationFormatter(rentals)
+	return formatterRentalList, &meta, constant.Res200Get
+}
+
+func (r *RentalService) GetDetailRental(apiCallID, rentalUUID string) (*response.RentalDetailResponse, constant.ResponseMap) {
+	rental, err := r.RentalRepository.GetRentalByUUID(r.DB, rentalUUID, true)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			helper.LogError(apiCallID, "Rental not found")
+			return nil, constant.Res400RentalNotFound
+		}
+		helper.LogError(apiCallID, "Unable to get rental with error : "+err.Error())
+		return nil, constant.Res422SomethingWentWrong
+	}
+	formatterRentalDetail := response.RentalDetailFormatter(*rental)
+	return &formatterRentalDetail, constant.Res200Get
 }
