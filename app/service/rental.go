@@ -20,6 +20,7 @@ import (
 type RentalServiceInterface interface {
 	CreateRental(apiCallID string, payload request.CreateRentalRequest) (*response.CreateRentalResponse, constant.ResponseMap)
 	ReturnRental(apiCallID string, rentalUUID string, payload request.ReturnRentalRequest) constant.ResponseMap
+	RentalPayment(apiCallID string, rentalUUID string, payload request.RentalPaymentRequest) constant.ResponseMap
 }
 
 type RentalService struct {
@@ -208,18 +209,7 @@ func (r *RentalService) ReturnRental(apiCallID string, rentalUUID string, payloa
 			lastPayment = lastPayment + payment.Amount
 		}
 
-		helper.LogInfo(apiCallID, "penaltyDay : ")
-		helper.LogInfo(apiCallID, penaltyDays)
-
-		helper.LogInfo(apiCallID, "penaltyPrice : ")
-		helper.LogInfo(apiCallID, penaltyPrice)
-
-		helper.LogInfo(apiCallID, "lastPayment : ")
-		helper.LogInfo(apiCallID, lastPayment)
-
 		remainingPayment = actualPrice - lastPayment
-		helper.LogInfo(apiCallID, "remaingPrice : ")
-		helper.LogInfo(apiCallID, remainingPayment)
 
 		if remainingPayment != payload.Payment {
 			helper.LogError(apiCallID, "Payment amount is not equal remaining payment")
@@ -286,12 +276,80 @@ func (r *RentalService) ReturnRental(apiCallID string, rentalUUID string, payloa
 			return constant.Res400InvalidReturnDate
 		case "invalid payment amount":
 			message := fmt.Sprintf("Payment should be %.2f", remainingPayment)
-			return constant.ResponseMap{Code: http.StatusBadRequest, Status: constant.ResponseStatusFailed, Message: message}
+			return constant.ResponseMap{Code: http.StatusBadRequest, Status: constant.ResponseStatusBadRequest, Message: message}
 		case "rental done":
 			return constant.Res400RentalHasBeenDone
 		default:
 			return constant.Res422SomethingWentWrong
 		}
 	}
-	return constant.Res200Update
+	return constant.Res200Save
+}
+
+func (r *RentalService) RentalPayment(apiCallID string, rentalUUID string, payload request.RentalPaymentRequest) constant.ResponseMap {
+	var remainingPayment float64
+	err := r.DB.Clauses(clause.Locking{Strength: "UPDATE"}).Transaction(func(tx *gorm.DB) error {
+		rental, err := r.RentalRepository.GetRentalByUUID(tx, rentalUUID, true)
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				helper.LogError(apiCallID, "Rental not found: "+rentalUUID)
+				return errors.New("rental not found")
+			}
+			helper.LogError(apiCallID, "Error getting rental by UUID: "+err.Error())
+			return errors.New("error getting rental by uuid")
+		}
+
+		if rental.Status != constant.RentalStatusOngoing {
+			helper.LogError(apiCallID, "Rental has been returned")
+			return errors.New("rental done")
+		}
+
+		var lastPayment float64
+		for _, payment := range rental.Payment {
+			lastPayment = lastPayment + payment.Amount
+		}
+
+		remainingPayment = rental.RentPrice - lastPayment
+
+		if remainingPayment == 0 {
+			helper.LogError(apiCallID, "Remaining payment is 0")
+			return errors.New("rent payment paid off")
+		}
+
+		if payload.Payment != remainingPayment {
+			helper.LogError(apiCallID, "Payment amount is not equal remaining payment")
+			return errors.New("invalid payment amount")
+		}
+
+		payment := model.Payment{
+			RentalUUID: rental.UUID,
+			Amount:     payload.Payment,
+			Type:       constant.PaymentTypeRentPayment,
+			Method:     constant.PaymentMethod(payload.PaymentMethod),
+		}
+
+		_, err = r.PaymentRepository.CreatePayment(tx, payment)
+		if err != nil {
+			helper.LogError(apiCallID, "Error creating Payment : "+err.Error())
+			return errors.New("error creating payment")
+		}
+
+		return nil
+	})
+	if err != nil {
+		switch err.Error() {
+		case "rental not found":
+			return constant.Res400RentalNotFound
+		case "invalid payment amount":
+			message := fmt.Sprintf("Payment should be %.2f", remainingPayment)
+			return constant.ResponseMap{Code: http.StatusBadRequest, Status: constant.ResponseStatusBadRequest, Message: message}
+		case "rental done":
+			return constant.Res400RentalHasBeenDone
+		case "rent payment paid off":
+			return constant.Res400RentPaymentPaidOff
+		default:
+			return constant.Res422SomethingWentWrong
+		}
+	}
+	return constant.Res200Save
 }

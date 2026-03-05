@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"log"
+	"motorcycle-rent-api/app/constant"
 	"reflect"
 	"regexp"
 	"sort"
@@ -152,6 +153,11 @@ func InitValidator() *validator.Validate {
 		log.Println("[ERROR] Error register validation plate_number : " + err.Error())
 	}
 
+	err = validate.RegisterValidation("payment_method_required", PaymentMethodRequired)
+	if err != nil {
+		log.Println("[ERROR] Error register validation payment_method : " + err.Error())
+	}
+
 	return validate
 }
 
@@ -159,6 +165,17 @@ func NotOnlySpace(fl validator.FieldLevel) bool {
 	data := fl.Field().String()
 
 	return strings.TrimSpace(data) != ""
+}
+
+func PaymentMethodRequired(fl validator.FieldLevel) bool {
+	payment := fl.Parent().FieldByName("Payment").Float()
+	method := fl.Field().String()
+
+	if payment > 0 {
+		return method == string(constant.PaymentMethodCash) || method == string(constant.PaymentMethodQris) || method == string(constant.PaymentMethodTransfer)
+	}
+
+	return true
 }
 
 func CMSAdminPasswordValidation(fl validator.FieldLevel) bool {

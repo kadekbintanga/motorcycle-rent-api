@@ -42,20 +42,21 @@ var (
 var (
 	Res400Failed                      = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Failed"}
 	Res400InvalidPayload              = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Invalid payload data"}
-	Res400PlateNumberExists           = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Plate number already exists"}
-	Res400MotorcycleNotFound          = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Motorcycle not found"}
-	Res400InvalidMotorcycleUUID       = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Invalid motorcycle ID"}
-	Res400IDOrSIMNumberExists         = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "ID or SIM number already exists"}
-	Res400CustomerNotFound            = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Customer not found"}
-	Res400InvalidCustomerUUID         = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Invalid customer ID"}
-	Res400CustomerBlacklisted         = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Customer was blacklisted"}
-	Res400MotorcycleUnavailable       = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Motorcycle is unavailable"}
-	Res400CustomerOngoingRent         = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Customer cannot create a new rental because there is an active rental that has not been returned"}
-	Res400InvalidRentPrice            = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Invalid Rent Price Payment"}
-	Res400DepositGreaterThanRentPrice = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Deposit payment cannot be greater than or equal to rent price"}
-	Res400RentalNotFound              = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Rental not found"}
-	Res400InvalidReturnDate           = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Invalid Return Date"}
-	Res400RentalHasBeenDone           = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusFailed, Message: "Rental has been done"}
+	Res400PlateNumberExists           = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Plate number already exists"}
+	Res400MotorcycleNotFound          = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Motorcycle not found"}
+	Res400InvalidMotorcycleUUID       = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Invalid motorcycle ID"}
+	Res400IDOrSIMNumberExists         = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "ID or SIM number already exists"}
+	Res400CustomerNotFound            = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Customer not found"}
+	Res400InvalidCustomerUUID         = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Invalid customer ID"}
+	Res400CustomerBlacklisted         = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Customer was blacklisted"}
+	Res400MotorcycleUnavailable       = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Motorcycle is unavailable"}
+	Res400CustomerOngoingRent         = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Customer cannot create a new rental because there is an active rental that has not been returned"}
+	Res400InvalidRentPrice            = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Invalid Rent Price Payment"}
+	Res400DepositGreaterThanRentPrice = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Deposit payment cannot be greater than or equal to rent price"}
+	Res400RentalNotFound              = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Rental not found"}
+	Res400InvalidReturnDate           = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Invalid Return Date"}
+	Res400RentalHasBeenDone           = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Rental has been done"}
+	Res400RentPaymentPaidOff          = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Rent Payment has been paid off"}
 )
 
 var (
