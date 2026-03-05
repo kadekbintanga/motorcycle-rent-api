@@ -15,7 +15,7 @@ type Rental struct {
 	MotorcycleUUID                uuid.UUID             `gorm:"column:motorcycle_uuid;type:uuid;index"`
 	RentDate                      time.Time             `gorm:"column:rent_date;type:date"`
 	ReturnDatePlan                time.Time             `gorm:"column:return_date_plan;type:date"`
-	ReturnDateActual              *time.Time            `gorm:"column:return_date_actual;type:date"`
+	ReturnDateActual              time.Time             `gorm:"column:return_date_actual;type:date"`
 	LateDay                       int                   `gorm:"column:late_day"`
 	PricePerDayCaptured           float64               `gorm:"column:price_per_day_captured;type:decimal(12,2)"`
 	CustomerNameCaptured          string                `gorm:"column:customer_name_captured;type:varchar(255)"`

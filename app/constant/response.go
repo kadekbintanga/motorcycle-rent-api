@@ -57,6 +57,7 @@ var (
 	Res400InvalidReturnDate           = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Invalid Return Date"}
 	Res400RentalHasBeenDone           = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Rental has been done"}
 	Res400RentPaymentPaidOff          = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Rent Payment has been paid off"}
+	Res400InvalidRentalUUID           = ResponseMap{Code: http.StatusBadRequest, Status: ResponseStatusBadRequest, Message: "Invalid rental ID"}
 )
 
 var (

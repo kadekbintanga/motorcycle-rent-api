@@ -5,7 +5,7 @@ type RentalStatus string
 const (
 	RentalStatusOngoing   RentalStatus = "ONGOING"
 	RentalStatusCompleted RentalStatus = "COMPLETED"
-	RentalStatusCancelled RentalStatus = "CANCELLED"
+	RentalStatusCancelled RentalStatus = "CANCELED"
 )
 
 type RetalTablePreload string
