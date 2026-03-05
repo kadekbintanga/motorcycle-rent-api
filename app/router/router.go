@@ -20,6 +20,7 @@ type Config struct {
 	MotorcycleHandler *handler.MotorcycleHandler
 	CustomerHandler   *handler.CustomerHandler
 	RentalHandler     *handler.RentalHandler
+	PaymentHandler    *handler.PaymentHandler
 }
 
 func (c *Config) Init() {
@@ -56,4 +57,16 @@ func (c *Config) Init() {
 	rentalGroup.PUT("/:rentalUUID/cancel", c.RentalHandler.CancelRental)
 	rentalGroup.GET("", c.RentalHandler.GetListRental)
 	rentalGroup.GET("/:rentalUUID", c.RentalHandler.GetRentalDetail)
+
+	// Payment router
+	paymentGroup := loggerGroup.Group("/payments", middleware.AdminAuthorized())
+	paymentGroup.GET("", c.PaymentHandler.GetListPayment)
+	paymentGroup.GET("/:paymentUUID", c.PaymentHandler.GetPaymentDetail)
+
+	// Summary router
+	summaryGroup := loggerGroup.Group("/summaries", middleware.AdminAuthorized())
+	summaryGroup.GET("/payments", c.PaymentHandler.GetPaymentSummary)
+	summaryGroup.GET("/rentals", c.RentalHandler.GetRentalSummary)
+	summaryGroup.GET("/customers", c.CustomerHandler.GetCustomerSummary)
+	summaryGroup.GET("/motorcycles", c.MotorcycleHandler.GetMotocycleSummary)
 }

@@ -149,3 +149,9 @@ func (m *MotorcycleHandler) UpdateMotorcycleStatus(c *gin.Context) {
 	res := m.Service.UpdateMotorcycleStatus(apiCallID, motorcycleUUID, payload)
 	helper.ResponseAPI(c, res)
 }
+
+func (m *MotorcycleHandler) GetMotocycleSummary(c *gin.Context) {
+	apiCallID := c.GetString(constant.RequestIDKey)
+	summary, res := m.Service.GetMotocycleSummary(apiCallID)
+	helper.ResponseAPI(c, res, summary)
+}

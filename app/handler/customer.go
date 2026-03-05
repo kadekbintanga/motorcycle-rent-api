@@ -151,3 +151,9 @@ func (ch *CustomerHandler) GetCustomerDetail(c *gin.Context) {
 	customer, res := ch.Service.GetDetailCustomer(apiCallID, customerUUID)
 	helper.ResponseAPI(c, res, customer)
 }
+
+func (ch *CustomerHandler) GetCustomerSummary(c *gin.Context) {
+	apiCallID := c.GetString(constant.RequestIDKey)
+	summary, res := ch.Service.GetCustomerSummary(apiCallID)
+	helper.ResponseAPI(c, res, summary)
+}

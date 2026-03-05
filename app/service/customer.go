@@ -19,6 +19,7 @@ type CustomerServiceInterface interface {
 	UpdateCustomerStatus(apiCallID string, customerUUID string, payload request.UpdateCustomerStatusRequest) constant.ResponseMap
 	GetListCustomerPagination(apiCallID string, param helper.PaginationParam, filter request.GetCustomerListFilter) ([]response.CustomerListPaginationResponse, *helper.ResponseMeta, constant.ResponseMap)
 	GetDetailCustomer(apiCallID string, customerUUID string) (*response.CustomerDetailResponse, constant.ResponseMap)
+	GetCustomerSummary(apiCallID string) (*response.CustomerSummary, constant.ResponseMap)
 }
 
 type CustomerService struct {
@@ -192,4 +193,13 @@ func (c *CustomerService) GetDetailCustomer(apiCallID string, customerUUID strin
 	}
 	formattedCustomerDetail := response.CustomerDetailFormatter(*customer)
 	return &formattedCustomerDetail, constant.Res200Get
+}
+
+func (c *CustomerService) GetCustomerSummary(apiCallID string) (*response.CustomerSummary, constant.ResponseMap) {
+	summary, err := c.CustomerRepository.GetCustomerSummary(c.DB)
+	if err != nil {
+		helper.LogError(apiCallID, "Error getting customer summary: "+err.Error())
+		return nil, constant.Res422SomethingWentWrong
+	}
+	return summary, constant.Res200Get
 }

@@ -4,6 +4,7 @@ import (
 	"motorcycle-rent-api/app/helper"
 	"motorcycle-rent-api/app/model"
 	"motorcycle-rent-api/app/resource/request"
+	"motorcycle-rent-api/app/resource/response"
 
 	"gorm.io/gorm"
 )
@@ -15,6 +16,7 @@ type MotorcycleRepositoryInterface interface {
 	GetMotorcycleByUUID(db *gorm.DB, uuid string, withPreload bool) (*model.Motorcycle, error)
 	UpdateMotorcycleMap(db *gorm.DB, motorcycle model.Motorcycle, updateData map[string]interface{}) error
 	UpdateMotocycleByUUID(db *gorm.DB, motocycleUUID string, updateData model.Motorcycle) error
+	GetMotocycleSummary(db *gorm.DB) (*response.MotorcycleSummary, error)
 }
 
 type MotorcycleRepository struct{}
@@ -107,4 +109,22 @@ func (m *MotorcycleRepository) UpdateMotocycleByUUID(db *gorm.DB, motocycleUUID 
 		return err
 	}
 	return nil
+}
+
+func (m *MotorcycleRepository) GetMotocycleSummary(db *gorm.DB) (*response.MotorcycleSummary, error) {
+	var result response.MotorcycleSummary
+	err := db.Table("motorcycles").
+		Select(`
+			COALESCE(COUNT(*),0) as total,
+			COALESCE(COUNT(*) FILTER (WHERE status = 'AVAILABLE'),0) as available,
+			COALESCE(COUNT(*) FILTER (WHERE status = 'RENTED'),0) as rented,
+			COALESCE(COUNT(*) FILTER (WHERE status = 'MAINTENANCE'),0) as maintenance,
+			COALESCE(COUNT(*) FILTER (WHERE status = 'INACTIVE'),0) as inactive
+		`).
+		Where("deleted_at IS NULL").Scan(&result).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &result, nil
 }

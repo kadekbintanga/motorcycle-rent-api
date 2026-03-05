@@ -4,6 +4,7 @@ import (
 	"motorcycle-rent-api/app/helper"
 	"motorcycle-rent-api/app/model"
 	"motorcycle-rent-api/app/resource/request"
+	"motorcycle-rent-api/app/resource/response"
 
 	"gorm.io/gorm"
 )
@@ -15,6 +16,7 @@ type CustomerRepositoryInterface interface {
 	GetCustomerByUUID(db *gorm.DB, customerUUID string, withPreload bool) (*model.Customer, error)
 	GetListCustomerPagination(db *gorm.DB, param helper.PaginationParam, filter request.GetCustomerListFilter) ([]model.Customer, helper.ResponseMeta, error)
 	UpdateCustomerByUUID(db *gorm.DB, customerUUID string, updateData model.Customer) error
+	GetCustomerSummary(db *gorm.DB) (*response.CustomerSummary, error)
 }
 
 type CustomerRepository struct{}
@@ -103,4 +105,20 @@ func (c *CustomerRepository) UpdateCustomerByUUID(db *gorm.DB, customerUUID stri
 		return err
 	}
 	return nil
+}
+
+func (c *CustomerRepository) GetCustomerSummary(db *gorm.DB) (*response.CustomerSummary, error) {
+	var result response.CustomerSummary
+	err := db.Table("customers").
+		Select(`
+			COUNT(*) as total,
+			COALESCE(SUM(CASE WHEN status = 'ACTIVE' THEN 1 ELSE 0 END),0) as active,
+			COALESCE(SUM(CASE WHEN status = 'BLACKLISTED' THEN 1 ELSE 0 END),0) as blacklisted
+		`).
+		Where("deleted_at IS NULL").Scan(&result).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &result, nil
 }

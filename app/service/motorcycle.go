@@ -19,6 +19,7 @@ type MotorcycleServiceInterface interface {
 	GetListMotorcyclesPagination(apiCallID string, param helper.PaginationParam, filter request.GetMotorcycleListFilter) ([]response.MotorcycleListpaginationResponse, *helper.ResponseMeta, constant.ResponseMap)
 	UpdateMotorcycleDetail(apiCallID string, motorcycleUUID string, payload request.UpdateMotorcycleRequest) constant.ResponseMap
 	UpdateMotorcycleStatus(apiCallID string, motorcycleUUID string, payload request.UpdateMotorcycleStatusRequest) constant.ResponseMap
+	GetMotocycleSummary(apiCallID string) (*response.MotorcycleSummary, constant.ResponseMap)
 }
 
 type MotorcycleService struct {
@@ -165,4 +166,13 @@ func (m *MotorcycleService) UpdateMotorcycleStatus(apiCallID string, motorcycleU
 		}
 	}
 	return constant.Res200Update
+}
+
+func (m *MotorcycleService) GetMotocycleSummary(apiCallID string) (*response.MotorcycleSummary, constant.ResponseMap) {
+	summary, err := m.MotorcycleRepository.GetMotocycleSummary(m.DB)
+	if err != nil {
+		helper.LogError(apiCallID, "Error getting motocycle summary: "+err.Error())
+		return nil, constant.Res422SomethingWentWrong
+	}
+	return summary, constant.Res200Get
 }

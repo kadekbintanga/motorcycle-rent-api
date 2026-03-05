@@ -146,3 +146,10 @@ func RentalDetailFormatter(rental model.Rental) RentalDetailResponse {
 		UpdatedAt:                     rental.UpdatedAt,
 	}
 }
+
+type RentalSummary struct {
+	Total     int64 `json:"total"`
+	Ongoing   int64 `json:"ongoing"`
+	Completed int64 `json:"completed"`
+	Canceled  int64 `json:"canceled"`
+}

@@ -31,3 +31,11 @@ func MotorcycleListpaginationResponseFormatter(motorcycles []model.Motorcycle) [
 	}
 	return result
 }
+
+type MotorcycleSummary struct {
+	Total       int `json:"total"`
+	Available   int `json:"available"`
+	Rented      int `json:"rented"`
+	Maintenance int `json:"maintenance"`
+	Inactive    int `json:"inactive"`
+}
