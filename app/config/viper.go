@@ -43,5 +43,6 @@ func InitEnvConfig() {
 		LogSTDOUT:               config.GetBool("LOG_STDOUT"),
 		JWTSecretAdmin:          config.GetString("JWT_SECRET_ADMIN"),
 		JWTExpiredDurationAdmin: config.GetDuration("JWT_EXPIRED_DURATION_ADMIN"),
+		BlacklistDayLate:        config.GetInt("BLACKLIST_DAY_LATE"),
 	}
 }

@@ -14,6 +14,7 @@ type MotorcycleRepositoryInterface interface {
 	GetListMotorcyclesPagination(db *gorm.DB, param helper.PaginationParam, filter request.GetMotorcycleListFilter) ([]model.Motorcycle, helper.ResponseMeta, error)
 	GetMotorcycleByUUID(db *gorm.DB, uuid string, withPreload bool) (*model.Motorcycle, error)
 	UpdateMotorcycleMap(db *gorm.DB, motorcycle model.Motorcycle, updateData map[string]interface{}) error
+	UpdateMotocycleByUUID(db *gorm.DB, motocycleUUID string, updateData model.Motorcycle) error
 }
 
 type MotorcycleRepository struct{}
@@ -94,6 +95,14 @@ func (m *MotorcycleRepository) GetMotorcycleByUUID(db *gorm.DB, motorcycleUUID s
 
 func (m *MotorcycleRepository) UpdateMotorcycleMap(db *gorm.DB, motorcycle model.Motorcycle, updateData map[string]interface{}) error {
 	err := db.Model(motorcycle).Updates(updateData).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *MotorcycleRepository) UpdateMotocycleByUUID(db *gorm.DB, motocycleUUID string, updateData model.Motorcycle) error {
+	err := db.Model(&model.Motorcycle{}).Where("uuid = ?", motocycleUUID).Updates(updateData).Error
 	if err != nil {
 		return err
 	}
