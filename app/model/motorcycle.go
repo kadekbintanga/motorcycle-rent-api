@@ -11,8 +11,8 @@ import (
 type Motorcycle struct {
 	ID          uint                      `gorm:"column:id;primaryKey"`
 	UUID        uuid.UUID                 `gorm:"column:uuid;type:uuid;default:uuid_generate_v4();index:uuid_unique;unique;"`
-	PlateNumber string                    `gorm:"column:plate_number;unique"`
-	Brand       string                    `gorm:"column:brand"`
+	PlateNumber string                    `gorm:"column:plate_number;unique;type:varchar(255)"`
+	Brand       string                    `gorm:"column:brand;type:varchar(255)"`
 	Type        constant.MotorcycleType   `gorm:"column:type;type:motorcycle_type;default:'MATIC';"`
 	Year        int                       `gorm:"column:year"`
 	Status      constant.MotorcycleStatus `gorm:"column:status;type:motorcycle_status;default:'AVAILABLE';"`

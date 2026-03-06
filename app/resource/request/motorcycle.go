@@ -2,7 +2,7 @@ package request
 
 type CreateMotorcycleRequest struct {
 	PlateNumber string  `json:"plate_number" validate:"required,plate_number"`
-	Brand       string  `json:"brand" validate:"required"`
+	Brand       string  `json:"brand" validate:"required,not_only_space,min=1,max=100"`
 	Type        string  `json:"type" validate:"required,oneof=MANUAL MATIC"`
 	Year        int     `json:"year" validate:"required"`
 	Status      string  `json:"status" validate:"required,oneof=AVAILABLE MAINTENANCE INACTIVE"`
@@ -17,7 +17,7 @@ type GetMotorcycleListFilter struct {
 
 type UpdateMotorcycleRequest struct {
 	PlateNumber string  `json:"plate_number" validate:"required,not_only_space,plate_number"`
-	Brand       string  `json:"brand" validate:"required"`
+	Brand       string  `json:"brand" validate:"required,not_only_space,min=1,max=100"`
 	Type        string  `json:"type" validate:"oneof=MANUAL MATIC"`
 	Year        int     `json:"year" validate:"required"`
 	Status      string  `json:"status" validate:"oneof=AVAILABLE MAINTENANCE INACTIVE"`
