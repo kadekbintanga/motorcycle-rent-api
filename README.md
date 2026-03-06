@@ -56,3 +56,6 @@ Berikut adalah penjelasan mengenai struktur folder yang digunakan dalam sistem i
     ```
     go run main.go
     ```
+7. API sudah dapat di akses melalui postman atau tools lainya
+
+### This Project created by : Kadek Bintang Anjasmara
