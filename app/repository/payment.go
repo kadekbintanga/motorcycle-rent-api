@@ -121,7 +121,7 @@ func (p *PaymentRepository) GetPaymentSummary(db *gorm.DB, filter request.GetPay
 	}
 
 	if filter.DateEnd != "" {
-		parseEndTime, err := time.Parse("2006-01-02 15:04:05", filter.DateStart+" 23:59:59")
+		parseEndTime, err := time.Parse("2006-01-02 15:04:05", filter.DateEnd+" 23:59:59")
 		if err != nil {
 			return nil, err
 		}

@@ -24,7 +24,7 @@ type Config struct {
 }
 
 func (c *Config) Init() {
-	// c.Server.GET("/health", middleware.InboundLogger(c.Logger), c.HealthHandler.HealthCheck)
+	c.Server.GET("/health", middleware.InboundLogger(c.Logger), c.HealthHandler.HealthCheck)
 
 	api := c.Server.Group("/api/v1")
 

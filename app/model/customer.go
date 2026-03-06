@@ -11,10 +11,10 @@ import (
 type Customer struct {
 	ID              uint                    `gorm:"column:id;primaryKey"`
 	UUID            uuid.UUID               `gorm:"column:uuid;type:uuid;default:uuid_generate_v4();index:uuid_unique;unique;"`
-	Name            string                  `gorm:"column:name"`
-	IDNumber        string                  `gorm:"column:id_number;unique"`
-	SIMNumber       string                  `gorm:"column:sim_number;unique"`
-	Phone           string                  `gorm:"column:phone"`
+	Name            string                  `gorm:"column:name;type:varchar(255)"`
+	IDNumber        string                  `gorm:"column:id_number;unique;type:varchar(255)"`
+	SIMNumber       string                  `gorm:"column:sim_number;unique;type:varchar(255)"`
+	Phone           string                  `gorm:"column:phone;type:varchar(255)"`
 	Address         string                  `gorm:"column:address"`
 	Status          constant.CustomerStatus `gorm:"column:status;type:customer_status;default:'ACTIVE';"`
 	BlacklistReason string                  `gorm:"column:blacklist_reason"`
